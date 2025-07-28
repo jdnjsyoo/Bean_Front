@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import cafe_list from './assets/cafe_list.jsx';
+import createSeatsPinImage from './assets/seats_pin.jsx'; // Assuming this is the correct path to the marker image creation function
 const { kakao } = window;
 
 function Kakao() {
@@ -17,7 +18,7 @@ function Kakao() {
     
     // fetch() 완료 추적을 위한 Promise 배열
     const fetchPromises = cafe_list.map((cafe) => {
-      return fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${cafe}`, {
+      return fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${cafe.name}`, {
         headers: {
           Authorization: 'KakaoAK 85343d921113ffdf032722fcc089ebec'
         }
@@ -25,23 +26,26 @@ function Kakao() {
         .then((res) => res.json())
         .then((data) => {
           if (!data || !data.documents || data.documents.length === 0) {
-            console.warn(`${cafe}에 대한 장소를 찾을 수 없습니다.`);
+            console.warn(`${cafe.name}에 대한 장소를 찾을 수 없습니다.`);
             return null;
           }
 
           const { x, y } = data.documents[0]; // x: 경도, y: 위도
           const position = new kakao.maps.LatLng(y, x);
           
+          const pinImage = createSeatsPinImage(cafe.seats);
+
           new kakao.maps.Marker({
             map: map,
-            position: position
+            position: position,
+            image: pinImage,
           });
 
           bounds.extend(position);
           return true;
         })
         .catch((error) => {
-          console.error(`${cafe} 검색 중 오류 발생:`, error);
+          console.error(`${cafe.name} 검색 중 오류 발생:`, error);
         });
     });
 
