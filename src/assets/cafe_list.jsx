@@ -17,7 +17,7 @@ const cafe_list = [
   { name: '옐로우버터드림', seats: '(3/7)' },
   { name: '이디야커피 서울대중앙점', seats: '(32/39)' },
   { name: '고로커피로스터스', seats: '(12/14)' },
-  { name: '스타벅스 낙성대역점', seats: '5/20' }
+  { name: '스타벅스 낙성대역점', seats: '(5/20)' }
   ]
 
 export default cafe_list;
